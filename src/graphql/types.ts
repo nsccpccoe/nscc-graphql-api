@@ -31,8 +31,13 @@ export type Scalars = {
 
 export type MetaData = {
   __typename?: 'MetaData';
+  /** Last Deployment Time */
   buildAt: Scalars['String'];
+  /** Name of a Server Owner */
+  name: Scalars['String'];
+  /** Last Deployment Platform */
   platform: Scalars['String'];
+  /** API Version */
   version: Scalars['String'];
 };
 
@@ -213,6 +218,7 @@ export interface IntPositiveScalarConfig extends GraphQLScalarTypeConfig<Resolve
 
 export type MetaDataResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['MetaData'] = ResolversParentTypes['MetaData']> = ResolversObject<{
   buildAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   platform?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

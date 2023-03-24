@@ -1,14 +1,18 @@
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+// import { join, dirname } from 'path';
+// import { fileURLToPath } from 'url';
+// import { loadFiles } from "@graphql-tools/load-files";
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { mergeResolvers } from "@graphql-tools/merge";
-import { loadFiles } from "@graphql-tools/load-files";
+import { resolvers as metadataResolver } from './resolvers/metadata.resolver.js'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const resolverFiles = await loadFiles(join(__dirname, "./**/*.resolver.*"), { useRequire: false })
+// const resolverFiles = await loadFiles(join(__dirname, "./**/*.resolver.*"), { useRequire: false })
+const resolvers = [
+  metadataResolver
+]
 
 const typeDefs = loadSchemaSync("./**/*.graphql", {
   loaders: [new GraphQLFileLoader()],
@@ -16,5 +20,5 @@ const typeDefs = loadSchemaSync("./**/*.graphql", {
 
 export const schema = makeExecutableSchema({
   typeDefs,
-  resolvers: mergeResolvers(resolverFiles),
+  resolvers: mergeResolvers(resolvers),
 });

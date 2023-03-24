@@ -3,7 +3,17 @@ type Query {
 }
 
 type MetaData {
+
+  "Name of a Server Owner"
+  name: String!
+
+  "API Version"
   version: String!
+
+  "Last Deployment Time"
   buildAt: String!
+
+  "Last Deployment Platform"
   platform: String!
 }
+
