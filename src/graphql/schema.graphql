@@ -17,3 +17,55 @@ type MetaData {
   platform: String!
 }
 
+type Image {
+  light: URL!
+  dark: URL!
+}
+
+type EventSponsor {
+  id: String!
+  displayName: String!
+  shortName: String!
+  logo: Image!
+  website: URL!
+}
+
+type EventHost {
+  id: String!
+  displayName: String!
+  shortName: String!
+  logo: Image!
+  coverImage: String!
+  website: URL!
+}
+
+type EventParticipant {
+  id: String!
+  displayName: String!
+}
+
+type EventHostHead {
+  id: String!
+  displayName: String!
+  description: String!
+  signature: Image!
+}
+
+enum EventCertificateType {
+  Achievement
+  Participation
+  Appreciation
+  Completion
+}
+
+type EventCertificate {
+  id: String!
+  type: EventCertificateType!
+  eventName: String!
+  hosts: [EventHost!]!
+  sponsors: [EventSponsor!]!
+  participant: EventParticipant!
+  signatures: [EventHostHead!]!
+  verifyURL: URL!
+  downloadURL: URL!
+}

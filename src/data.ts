@@ -1,4 +1,4 @@
-import { Organizer, OrganizerId } from "./db";
+import { Organizer, OrganizerId } from "./interfaces/databas";
 
 export const organizers: Record<OrganizerId, Organizer> = {
   codechefpccoe: {

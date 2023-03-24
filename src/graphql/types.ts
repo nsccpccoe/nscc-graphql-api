@@ -27,6 +27,66 @@ export type Scalars = {
   IntNonZero: number;
   IntPositive: number;
   StringNonEmpty: string;
+  URL: any;
+};
+
+export type EventCertificate = {
+  __typename?: 'EventCertificate';
+  downloadURL: Scalars['URL'];
+  eventName: Scalars['String'];
+  hosts: Array<EventHost>;
+  id: Scalars['String'];
+  participant: EventParticipant;
+  signatures: Array<EventHostHead>;
+  sponsors: Array<EventSponsor>;
+  type: EventCertificateType;
+  verifyURL: Scalars['URL'];
+};
+
+export enum EventCertificateType {
+  Achievement = 'Achievement',
+  Appreciation = 'Appreciation',
+  Completion = 'Completion',
+  Participation = 'Participation'
+}
+
+export type EventHost = {
+  __typename?: 'EventHost';
+  coverImage: Scalars['String'];
+  displayName: Scalars['String'];
+  id: Scalars['String'];
+  logo: Image;
+  shortName: Scalars['String'];
+  website: Scalars['URL'];
+};
+
+export type EventHostHead = {
+  __typename?: 'EventHostHead';
+  description: Scalars['String'];
+  displayName: Scalars['String'];
+  id: Scalars['String'];
+  signature: Image;
+};
+
+export type EventParticipant = {
+  __typename?: 'EventParticipant';
+  displayName: Scalars['String'];
+  id: Scalars['String'];
+};
+
+export type EventSponsor = {
+  __typename?: 'EventSponsor';
+  displayName: Scalars['String'];
+  id: Scalars['String'];
+  logo: Image;
+  shortName: Scalars['String'];
+  website: Scalars['URL'];
+};
+
+export type Image = {
+  __typename?: 'Image';
+  dark: Scalars['URL'];
+  light: Scalars['URL'];
 };
 
 export type MetaData = {
@@ -120,12 +180,19 @@ export type ResolversTypes = ResolversObject<{
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DateFuture: ResolverTypeWrapper<Scalars['DateFuture']>;
   DatePast: ResolverTypeWrapper<Scalars['DatePast']>;
+  EventCertificate: ResolverTypeWrapper<EventCertificate>;
+  EventCertificateType: EventCertificateType;
+  EventHost: ResolverTypeWrapper<EventHost>;
+  EventHostHead: ResolverTypeWrapper<EventHostHead>;
+  EventParticipant: ResolverTypeWrapper<EventParticipant>;
+  EventSponsor: ResolverTypeWrapper<EventSponsor>;
   Float0To1: ResolverTypeWrapper<Scalars['Float0To1']>;
   FloatNegative: ResolverTypeWrapper<Scalars['FloatNegative']>;
   FloatNonNegative: ResolverTypeWrapper<Scalars['FloatNonNegative']>;
   FloatNonPositive: ResolverTypeWrapper<Scalars['FloatNonPositive']>;
   FloatNonZero: ResolverTypeWrapper<Scalars['FloatNonZero']>;
   FloatPositive: ResolverTypeWrapper<Scalars['FloatPositive']>;
+  Image: ResolverTypeWrapper<Image>;
   IntNegative: ResolverTypeWrapper<Scalars['IntNegative']>;
   IntNonNegative: ResolverTypeWrapper<Scalars['IntNonNegative']>;
   IntNonPositive: ResolverTypeWrapper<Scalars['IntNonPositive']>;
@@ -135,6 +202,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   StringNonEmpty: ResolverTypeWrapper<Scalars['StringNonEmpty']>;
+  URL: ResolverTypeWrapper<Scalars['URL']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -143,12 +211,18 @@ export type ResolversParentTypes = ResolversObject<{
   Date: Scalars['Date'];
   DateFuture: Scalars['DateFuture'];
   DatePast: Scalars['DatePast'];
+  EventCertificate: EventCertificate;
+  EventHost: EventHost;
+  EventHostHead: EventHostHead;
+  EventParticipant: EventParticipant;
+  EventSponsor: EventSponsor;
   Float0To1: Scalars['Float0To1'];
   FloatNegative: Scalars['FloatNegative'];
   FloatNonNegative: Scalars['FloatNonNegative'];
   FloatNonPositive: Scalars['FloatNonPositive'];
   FloatNonZero: Scalars['FloatNonZero'];
   FloatPositive: Scalars['FloatPositive'];
+  Image: Image;
   IntNegative: Scalars['IntNegative'];
   IntNonNegative: Scalars['IntNonNegative'];
   IntNonPositive: Scalars['IntNonPositive'];
@@ -158,6 +232,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String'];
   StringNonEmpty: Scalars['StringNonEmpty'];
+  URL: Scalars['URL'];
 }>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -171,6 +246,52 @@ export interface DateFutureScalarConfig extends GraphQLScalarTypeConfig<Resolver
 export interface DatePastScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DatePast'], any> {
   name: 'DatePast';
 }
+
+export type EventCertificateResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventCertificate'] = ResolversParentTypes['EventCertificate']> = ResolversObject<{
+  downloadURL?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  eventName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  hosts?: Resolver<Array<ResolversTypes['EventHost']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  participant?: Resolver<ResolversTypes['EventParticipant'], ParentType, ContextType>;
+  signatures?: Resolver<Array<ResolversTypes['EventHostHead']>, ParentType, ContextType>;
+  sponsors?: Resolver<Array<ResolversTypes['EventSponsor']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['EventCertificateType'], ParentType, ContextType>;
+  verifyURL?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type EventHostResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventHost'] = ResolversParentTypes['EventHost']> = ResolversObject<{
+  coverImage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  logo?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
+  shortName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  website?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type EventHostHeadResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventHostHead'] = ResolversParentTypes['EventHostHead']> = ResolversObject<{
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signature?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type EventParticipantResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventParticipant'] = ResolversParentTypes['EventParticipant']> = ResolversObject<{
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type EventSponsorResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventSponsor'] = ResolversParentTypes['EventSponsor']> = ResolversObject<{
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  logo?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
+  shortName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  website?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export interface Float0To1ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Float0To1'], any> {
   name: 'Float0To1';
@@ -195,6 +316,12 @@ export interface FloatNonZeroScalarConfig extends GraphQLScalarTypeConfig<Resolv
 export interface FloatPositiveScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['FloatPositive'], any> {
   name: 'FloatPositive';
 }
+
+export type ImageResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = ResolversObject<{
+  dark?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  light?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export interface IntNegativeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IntNegative'], any> {
   name: 'IntNegative';
@@ -232,16 +359,26 @@ export interface StringNonEmptyScalarConfig extends GraphQLScalarTypeConfig<Reso
   name: 'StringNonEmpty';
 }
 
+export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
+  name: 'URL';
+}
+
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Date?: GraphQLScalarType;
   DateFuture?: GraphQLScalarType;
   DatePast?: GraphQLScalarType;
+  EventCertificate?: EventCertificateResolvers<ContextType>;
+  EventHost?: EventHostResolvers<ContextType>;
+  EventHostHead?: EventHostHeadResolvers<ContextType>;
+  EventParticipant?: EventParticipantResolvers<ContextType>;
+  EventSponsor?: EventSponsorResolvers<ContextType>;
   Float0To1?: GraphQLScalarType;
   FloatNegative?: GraphQLScalarType;
   FloatNonNegative?: GraphQLScalarType;
   FloatNonPositive?: GraphQLScalarType;
   FloatNonZero?: GraphQLScalarType;
   FloatPositive?: GraphQLScalarType;
+  Image?: ImageResolvers<ContextType>;
   IntNegative?: GraphQLScalarType;
   IntNonNegative?: GraphQLScalarType;
   IntNonPositive?: GraphQLScalarType;
@@ -250,5 +387,6 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   MetaData?: MetaDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   StringNonEmpty?: GraphQLScalarType;
+  URL?: GraphQLScalarType;
 }>;
 
