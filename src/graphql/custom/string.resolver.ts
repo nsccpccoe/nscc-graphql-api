@@ -135,7 +135,7 @@ export const resolvers: Resolvers = {
   }),
   EmailCompany: new GraphQLScalarType<string, string>({
     name: 'EmailCompany',
-    description: 'EmailCompany',
+    description: 'Company Email',
     serialize(value) {
       const str: string = parseString(value)
       if(isCompanyEmail(str)) return str

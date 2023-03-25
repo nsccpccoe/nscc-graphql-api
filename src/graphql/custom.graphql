@@ -14,27 +14,10 @@ scalar FloatNonPositive
 scalar FloatNonZero
 scalar Float0To1
 
-"Non Empty String"
 scalar StringNonEmpty
-
 scalar Char
 scalar CharUppercase
 scalar CharLowercase
-
-"""
-Uniform Resource Locator
-Dependency: https://www.npmjs.com/package/is-url-superb
-"""
-scalar URL
-
-"""
-Email
-Dependency: https://www.npmjs.com/package/email-validator
-"""
-scalar Email
-
-"""
-Company Email
-Dependency: https://www.npmjs.com/package/company-email-validator
-"""
-scalar EmailCompany
+scalar URL @specifiedBy(url: "https://www.npmjs.com/package/is-url-superb")
+scalar Email @specifiedBy(url: "https://www.npmjs.com/package/email-validator")
+scalar EmailCompany @specifiedBy(url: "https://www.npmjs.com/package/company-email-validator")

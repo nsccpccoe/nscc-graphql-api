@@ -1,5 +1,51 @@
 type Query {
   metadata: MetaData!
+
+  # User
+  user(userId: ID!): User!
+
+  # Events
+  event(eventId: ID!): Event!
+  events: [Event!]!
+
+  # Certificates
+  certificateById(certificateId: ID!): EventCertificate!
+  certificatesByUser(userId: ID!): [EventCertificate!]!
+  certificatesByEvent(eventId: ID!): [EventCertificate!]!
+}
+
+type Mutation {
+
+  # User
+  updateUser(user: UpdateUserInput!): User!
+  deleteUser(userId: ID!): Boolean!
+
+  # Events
+  createEvent(event: CreateEventInput!): Event!
+  updateEvent(event: UpdateEventInput!): Event!
+  deleteEvent(eventId: ID!): Boolean!
+  register(eventId: ID!): Event!
+  unregister(eventId: ID!): Event!
+
+  # Certificate
+  createEventCertificate(certificate: CreateEventCertificateInput!): EventCertificate!
+  updateEventCertificate(certificate: UpdateEventCertificateInput!): EventCertificate!
+  deleteEventCertificate(certificateId: ID!): Boolean!
+
+  #Host
+  createHost(host: CreateEventHostInput!): EventHost!
+  updateHost(host: UpdateEventHostInput!): EventHost!
+  deleteHost(hostId: ID!): Boolean!
+
+  #Sponsor
+  createEventSponsor(host: CreateEventSponsorInput!): EventSponsor!
+  updateEventSponsor(host: UpdateEventSponsorInput!): EventSponsor!
+  deleteEventSponsor(hostId: ID!): Boolean!
+
+  #EventHostHead
+  createEventHostHead(head: CreateEventHostHeadInput!): EventHostHead!
+  updateEventHostHead(head: UpdateEventHostHeadInput!): EventHostHead!
+  deleteEventHostHead(headId: ID!): Boolean!
 }
 
 type MetaData {
@@ -35,6 +81,12 @@ type Link {
   target: LinkTypeEnum!
 }
 
+input LinkInput {
+  displayText: StringNonEmpty!
+  href: URL!
+  target: LinkTypeEnum!
+}
+
 type EventSponsor {
   id: ID!
   displayName: StringNonEmpty!
@@ -42,6 +94,24 @@ type EventSponsor {
   logo: Image!
   links: [Link!]!
   coverImage: Image!
+}
+
+input CreateEventSponsorInput {
+  id: ID!
+  displayName: StringNonEmpty!
+  shortName: StringNonEmpty!
+  # logo: Image!
+  links: [LinkInput!]!
+  # coverImage: Image!
+}
+
+input UpdateEventSponsorInput {
+  id: ID!
+  displayName: StringNonEmpty
+  shortName: StringNonEmpty
+  # logo: Image!
+  links: [LinkInput!]
+  # coverImage: Image!
 }
 
 type EventHost {
@@ -53,13 +123,30 @@ type EventHost {
   links: [Link!]!
 }
 
+input CreateEventHostInput {
+  displayName: StringNonEmpty!
+  shortName: StringNonEmpty!
+  # logo: Image!
+  # coverImage: Image!
+  links: [LinkInput!]!
+}
+
+input UpdateEventHostInput {
+  id: ID!
+  displayName: StringNonEmpty
+  shortName: StringNonEmpty
+  # logo: Image!
+  # coverImage: Image!
+  links: [LinkInput!]
+}
+
 enum Gender {
   Male
   Female
   Other
 }
 
-type Participant {
+type User {
   id: ID!
   email: Email!
   displayName: StringNonEmpty
@@ -74,6 +161,24 @@ type Participant {
   prn: StringNonEmpty
   rollNumber: StringNonEmpty
   links: [Link!]!
+  events: [Event]!
+  certificates: [EventCertificate!]!
+}
+
+input UpdateUserInput {
+  id: ID!
+  displayName: StringNonEmpty
+  phoneNumber: StringNonEmpty
+  gender: Gender
+  dob: DatePast
+  photoURL: URL
+  graduationYear: Int
+  collegeName: StringNonEmpty
+  collegeBranch: StringNonEmpty
+  collegeDivision: CharUppercase
+  prn: StringNonEmpty
+  rollNumber: StringNonEmpty
+  links: [LinkInput!]
 }
 
 type EventHostHead {
@@ -81,6 +186,19 @@ type EventHostHead {
   displayName: StringNonEmpty!
   description: StringNonEmpty!
   signature: Image!
+}
+
+input CreateEventHostHeadInput {
+  displayName: StringNonEmpty!
+  description: StringNonEmpty!
+  # signature: Image!
+}
+
+input UpdateEventHostHeadInput {
+  id: ID!
+  displayName: StringNonEmpty
+  description: StringNonEmpty
+  # signature: Image!
 }
 
 type Event {
@@ -97,6 +215,38 @@ type Event {
   landingPage: Link!
   registration: Link!
   community: Link!
+  registered: Boolean
+}
+
+input CreateEventInput {
+  title: StringNonEmpty!
+  subtitle: StringNonEmpty!
+  description: StringNonEmpty!
+  startAt: Date!
+  endAt: Date!
+  featured: Boolean!
+  # coverImage: Image!
+  hosts: [ID!]!
+  sponsors: [ID!]!
+  landingPage: LinkInput!
+  registration: LinkInput!
+  community: LinkInput!
+}
+
+input UpdateEventInput {
+  id: ID!
+  title: StringNonEmpty
+  subtitle: StringNonEmpty
+  description: StringNonEmpty
+  startAt: Date
+  endAt: Date
+  featured: Boolean
+  # coverImage: Image!
+  hosts: [ID!]
+  sponsors: [ID!]
+  landingPage: LinkInput
+  registration: LinkInput
+  community: LinkInput
 }
 
 enum EventCertificateType {
@@ -110,8 +260,23 @@ type EventCertificate {
   id: ID!
   type: EventCertificateType!
   event: Event!
-  participant: Participant!
+  participant: User!
   signatures: [EventHostHead!]!
   verifyURL: Link!
   downloadURL: Link!
+}
+
+input CreateEventCertificateInput {
+  type: EventCertificateType!
+  eventId: ID!
+  participantId: ID!
+  description: StringNonEmpty!
+}
+
+input UpdateEventCertificateInput {
+  id: ID!
+  type: EventCertificateType
+  eventId: ID
+  participantId: ID
+  description: StringNonEmpty
 }

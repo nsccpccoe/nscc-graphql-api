@@ -38,7 +38,7 @@ export interface Link {
   target: LinkTypeEnum
 }
 
-export interface Participant {
+export interface User {
   id: string
   email: string
   displayName: string
@@ -102,6 +102,6 @@ export interface EventCertificate {
   id: string
   type: EventCertificateType
   event: Event["id"]
-  participant: Participant["id"]
+  participant: User["id"]
   signatures: Dignitaries["id"][]
 }
