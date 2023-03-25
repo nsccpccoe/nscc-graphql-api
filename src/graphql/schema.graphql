@@ -5,16 +5,16 @@ type Query {
 type MetaData {
 
   "Name of a Server Owner"
-  name: String!
+  name: StringNonEmpty!
 
   "API Version"
-  version: String!
+  version: StringNonEmpty!
 
   "Last Deployment Time"
-  buildAt: String!
+  buildAt: StringNonEmpty!
 
   "Last Deployment Platform"
-  platform: String!
+  platform: StringNonEmpty!
 }
 
 type Image {
@@ -22,33 +22,81 @@ type Image {
   dark: URL!
 }
 
+enum LinkTypeEnum {
+  _self
+  _blank
+  _parent
+  _top
+}
+
+type Link {
+  displayText: StringNonEmpty!
+  href: URL!
+  target: LinkTypeEnum!
+}
+
 type EventSponsor {
-  id: String!
-  displayName: String!
-  shortName: String!
+  id: ID!
+  displayName: StringNonEmpty!
+  shortName: StringNonEmpty!
   logo: Image!
-  website: URL!
+  links: [Link!]!
+  coverImage: Image!
 }
 
 type EventHost {
-  id: String!
-  displayName: String!
-  shortName: String!
+  id: ID!
+  displayName: StringNonEmpty!
+  shortName: StringNonEmpty!
   logo: Image!
-  coverImage: String!
-  website: URL!
+  coverImage: Image!
+  links: [Link!]!
 }
 
-type EventParticipant {
-  id: String!
-  displayName: String!
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+type Participant {
+  id: ID!
+  email: Email!
+  displayName: StringNonEmpty
+  phoneNumber: StringNonEmpty
+  gender: Gender
+  dob: DatePast
+  photoURL: URL
+  graduationYear: Int
+  collegeName: StringNonEmpty
+  collegeBranch: StringNonEmpty
+  collegeDivision: CharUppercase
+  prn: StringNonEmpty
+  rollNumber: StringNonEmpty
+  links: [Link!]!
 }
 
 type EventHostHead {
-  id: String!
-  displayName: String!
-  description: String!
+  id: ID!
+  displayName: StringNonEmpty!
+  description: StringNonEmpty!
   signature: Image!
+}
+
+type Event {
+  id: ID!
+  title: StringNonEmpty!
+  subtitle: StringNonEmpty!
+  description: StringNonEmpty!
+  startAt: Date!
+  endAt: Date!
+  featured: Boolean!
+  coverImage: Image!
+  hosts: [EventHost!]!
+  sponsors: [EventSponsor!]!
+  landingPage: Link!
+  registration: Link!
+  community: Link!
 }
 
 enum EventCertificateType {
@@ -59,13 +107,11 @@ enum EventCertificateType {
 }
 
 type EventCertificate {
-  id: String!
+  id: ID!
   type: EventCertificateType!
-  eventName: String!
-  hosts: [EventHost!]!
-  sponsors: [EventSponsor!]!
-  participant: EventParticipant!
+  event: Event!
+  participant: Participant!
   signatures: [EventHostHead!]!
-  verifyURL: URL!
-  downloadURL: URL!
+  verifyURL: Link!
+  downloadURL: Link!
 }

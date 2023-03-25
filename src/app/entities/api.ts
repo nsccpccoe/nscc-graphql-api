@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { MyContext } from '../index.js';
+import { MyContext } from '../../index.js';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -12,9 +12,22 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Char: any;
+  CharLowercase: any;
+  CharUppercase: any;
   Date: Date;
   DateFuture: Date;
   DatePast: Date;
+  /**
+   * Email
+   * Dependency: https://www.npmjs.com/package/email-validator
+   */
+  Email: any;
+  /**
+   * Company Email
+   * Dependency: https://www.npmjs.com/package/company-email-validator
+   */
+  EmailCompany: any;
   Float0To1: number;
   FloatNegative: number;
   FloatNonNegative: number;
@@ -28,7 +41,10 @@ export type Scalars = {
   IntPositive: number;
   /** Non Empty String */
   StringNonEmpty: string;
-  /** Uniform Resource Locator */
+  /**
+   * Uniform Resource Locator
+   * Dependency: https://www.npmjs.com/package/is-url-superb
+   */
   URL: any;
 };
 
@@ -54,7 +70,7 @@ export type EventCertificate = {
   downloadURL: Link;
   event: Event;
   id: Scalars['ID'];
-  participant: EventParticipant;
+  participant: Participant;
   signatures: Array<EventHostHead>;
   type: EventCertificateType;
   verifyURL: Link;
@@ -69,12 +85,12 @@ export enum EventCertificateType {
 
 export type EventHost = {
   __typename?: 'EventHost';
-  coverImage: Scalars['URL'];
+  coverImage: Image;
   displayName: Scalars['StringNonEmpty'];
   id: Scalars['ID'];
+  links: Array<Link>;
   logo: Image;
   shortName: Scalars['StringNonEmpty'];
-  website: Scalars['URL'];
 };
 
 export type EventHostHead = {
@@ -85,20 +101,21 @@ export type EventHostHead = {
   signature: Image;
 };
 
-export type EventParticipant = {
-  __typename?: 'EventParticipant';
-  displayName: Scalars['StringNonEmpty'];
-  id: Scalars['ID'];
-};
-
 export type EventSponsor = {
   __typename?: 'EventSponsor';
+  coverImage: Image;
   displayName: Scalars['StringNonEmpty'];
   id: Scalars['ID'];
+  links: Array<Link>;
   logo: Image;
   shortName: Scalars['StringNonEmpty'];
-  website: Link;
 };
+
+export enum Gender {
+  Female = 'Female',
+  Male = 'Male',
+  Other = 'Other'
+}
 
 export type Image = {
   __typename?: 'Image';
@@ -130,6 +147,24 @@ export type MetaData = {
   platform: Scalars['StringNonEmpty'];
   /** API Version */
   version: Scalars['StringNonEmpty'];
+};
+
+export type Participant = {
+  __typename?: 'Participant';
+  collegeBranch?: Maybe<Scalars['StringNonEmpty']>;
+  collegeDivision?: Maybe<Scalars['CharUppercase']>;
+  collegeName?: Maybe<Scalars['StringNonEmpty']>;
+  displayName?: Maybe<Scalars['StringNonEmpty']>;
+  dob?: Maybe<Scalars['DatePast']>;
+  email: Scalars['Email'];
+  gender?: Maybe<Gender>;
+  graduationYear?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  links: Array<Link>;
+  phoneNumber?: Maybe<Scalars['StringNonEmpty']>;
+  photoURL?: Maybe<Scalars['URL']>;
+  prn?: Maybe<Scalars['StringNonEmpty']>;
+  rollNumber?: Maybe<Scalars['StringNonEmpty']>;
 };
 
 export type Query = {
@@ -208,15 +243,19 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Char: ResolverTypeWrapper<Scalars['Char']>;
+  CharLowercase: ResolverTypeWrapper<Scalars['CharLowercase']>;
+  CharUppercase: ResolverTypeWrapper<Scalars['CharUppercase']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DateFuture: ResolverTypeWrapper<Scalars['DateFuture']>;
   DatePast: ResolverTypeWrapper<Scalars['DatePast']>;
+  Email: ResolverTypeWrapper<Scalars['Email']>;
+  EmailCompany: ResolverTypeWrapper<Scalars['EmailCompany']>;
   Event: ResolverTypeWrapper<Event>;
   EventCertificate: ResolverTypeWrapper<EventCertificate>;
   EventCertificateType: EventCertificateType;
   EventHost: ResolverTypeWrapper<EventHost>;
   EventHostHead: ResolverTypeWrapper<EventHostHead>;
-  EventParticipant: ResolverTypeWrapper<EventParticipant>;
   EventSponsor: ResolverTypeWrapper<EventSponsor>;
   Float0To1: ResolverTypeWrapper<Scalars['Float0To1']>;
   FloatNegative: ResolverTypeWrapper<Scalars['FloatNegative']>;
@@ -224,8 +263,10 @@ export type ResolversTypes = ResolversObject<{
   FloatNonPositive: ResolverTypeWrapper<Scalars['FloatNonPositive']>;
   FloatNonZero: ResolverTypeWrapper<Scalars['FloatNonZero']>;
   FloatPositive: ResolverTypeWrapper<Scalars['FloatPositive']>;
+  Gender: Gender;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Image: ResolverTypeWrapper<Image>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   IntNegative: ResolverTypeWrapper<Scalars['IntNegative']>;
   IntNonNegative: ResolverTypeWrapper<Scalars['IntNonNegative']>;
   IntNonPositive: ResolverTypeWrapper<Scalars['IntNonPositive']>;
@@ -234,6 +275,7 @@ export type ResolversTypes = ResolversObject<{
   Link: ResolverTypeWrapper<Link>;
   LinkTypeEnum: LinkTypeEnum;
   MetaData: ResolverTypeWrapper<MetaData>;
+  Participant: ResolverTypeWrapper<Participant>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   StringNonEmpty: ResolverTypeWrapper<Scalars['StringNonEmpty']>;
@@ -243,14 +285,18 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
+  Char: Scalars['Char'];
+  CharLowercase: Scalars['CharLowercase'];
+  CharUppercase: Scalars['CharUppercase'];
   Date: Scalars['Date'];
   DateFuture: Scalars['DateFuture'];
   DatePast: Scalars['DatePast'];
+  Email: Scalars['Email'];
+  EmailCompany: Scalars['EmailCompany'];
   Event: Event;
   EventCertificate: EventCertificate;
   EventHost: EventHost;
   EventHostHead: EventHostHead;
-  EventParticipant: EventParticipant;
   EventSponsor: EventSponsor;
   Float0To1: Scalars['Float0To1'];
   FloatNegative: Scalars['FloatNegative'];
@@ -260,6 +306,7 @@ export type ResolversParentTypes = ResolversObject<{
   FloatPositive: Scalars['FloatPositive'];
   ID: Scalars['ID'];
   Image: Image;
+  Int: Scalars['Int'];
   IntNegative: Scalars['IntNegative'];
   IntNonNegative: Scalars['IntNonNegative'];
   IntNonPositive: Scalars['IntNonPositive'];
@@ -267,11 +314,24 @@ export type ResolversParentTypes = ResolversObject<{
   IntPositive: Scalars['IntPositive'];
   Link: Link;
   MetaData: MetaData;
+  Participant: Participant;
   Query: {};
   String: Scalars['String'];
   StringNonEmpty: Scalars['StringNonEmpty'];
   URL: Scalars['URL'];
 }>;
+
+export interface CharScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Char'], any> {
+  name: 'Char';
+}
+
+export interface CharLowercaseScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CharLowercase'], any> {
+  name: 'CharLowercase';
+}
+
+export interface CharUppercaseScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CharUppercase'], any> {
+  name: 'CharUppercase';
+}
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
@@ -283,6 +343,14 @@ export interface DateFutureScalarConfig extends GraphQLScalarTypeConfig<Resolver
 
 export interface DatePastScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DatePast'], any> {
   name: 'DatePast';
+}
+
+export interface EmailScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Email'], any> {
+  name: 'Email';
+}
+
+export interface EmailCompanyScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['EmailCompany'], any> {
+  name: 'EmailCompany';
 }
 
 export type EventResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']> = ResolversObject<{
@@ -306,7 +374,7 @@ export type EventCertificateResolvers<ContextType = MyContext, ParentType extend
   downloadURL?: Resolver<ResolversTypes['Link'], ParentType, ContextType>;
   event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  participant?: Resolver<ResolversTypes['EventParticipant'], ParentType, ContextType>;
+  participant?: Resolver<ResolversTypes['Participant'], ParentType, ContextType>;
   signatures?: Resolver<Array<ResolversTypes['EventHostHead']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['EventCertificateType'], ParentType, ContextType>;
   verifyURL?: Resolver<ResolversTypes['Link'], ParentType, ContextType>;
@@ -314,12 +382,12 @@ export type EventCertificateResolvers<ContextType = MyContext, ParentType extend
 }>;
 
 export type EventHostResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventHost'] = ResolversParentTypes['EventHost']> = ResolversObject<{
-  coverImage?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  coverImage?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
   displayName?: Resolver<ResolversTypes['StringNonEmpty'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
   logo?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
   shortName?: Resolver<ResolversTypes['StringNonEmpty'], ParentType, ContextType>;
-  website?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -331,18 +399,13 @@ export type EventHostHeadResolvers<ContextType = MyContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type EventParticipantResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventParticipant'] = ResolversParentTypes['EventParticipant']> = ResolversObject<{
-  displayName?: Resolver<ResolversTypes['StringNonEmpty'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type EventSponsorResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['EventSponsor'] = ResolversParentTypes['EventSponsor']> = ResolversObject<{
+  coverImage?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
   displayName?: Resolver<ResolversTypes['StringNonEmpty'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
   logo?: Resolver<ResolversTypes['Image'], ParentType, ContextType>;
   shortName?: Resolver<ResolversTypes['StringNonEmpty'], ParentType, ContextType>;
-  website?: Resolver<ResolversTypes['Link'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -411,6 +474,24 @@ export type MetaDataResolvers<ContextType = MyContext, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ParticipantResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Participant'] = ResolversParentTypes['Participant']> = ResolversObject<{
+  collegeBranch?: Resolver<Maybe<ResolversTypes['StringNonEmpty']>, ParentType, ContextType>;
+  collegeDivision?: Resolver<Maybe<ResolversTypes['CharUppercase']>, ParentType, ContextType>;
+  collegeName?: Resolver<Maybe<ResolversTypes['StringNonEmpty']>, ParentType, ContextType>;
+  displayName?: Resolver<Maybe<ResolversTypes['StringNonEmpty']>, ParentType, ContextType>;
+  dob?: Resolver<Maybe<ResolversTypes['DatePast']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['Email'], ParentType, ContextType>;
+  gender?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>;
+  graduationYear?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
+  phoneNumber?: Resolver<Maybe<ResolversTypes['StringNonEmpty']>, ParentType, ContextType>;
+  photoURL?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>;
+  prn?: Resolver<Maybe<ResolversTypes['StringNonEmpty']>, ParentType, ContextType>;
+  rollNumber?: Resolver<Maybe<ResolversTypes['StringNonEmpty']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   metadata?: Resolver<ResolversTypes['MetaData'], ParentType, ContextType>;
 }>;
@@ -424,14 +505,18 @@ export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 }
 
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
+  Char?: GraphQLScalarType;
+  CharLowercase?: GraphQLScalarType;
+  CharUppercase?: GraphQLScalarType;
   Date?: GraphQLScalarType;
   DateFuture?: GraphQLScalarType;
   DatePast?: GraphQLScalarType;
+  Email?: GraphQLScalarType;
+  EmailCompany?: GraphQLScalarType;
   Event?: EventResolvers<ContextType>;
   EventCertificate?: EventCertificateResolvers<ContextType>;
   EventHost?: EventHostResolvers<ContextType>;
   EventHostHead?: EventHostHeadResolvers<ContextType>;
-  EventParticipant?: EventParticipantResolvers<ContextType>;
   EventSponsor?: EventSponsorResolvers<ContextType>;
   Float0To1?: GraphQLScalarType;
   FloatNegative?: GraphQLScalarType;
@@ -447,6 +532,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   IntPositive?: GraphQLScalarType;
   Link?: LinkResolvers<ContextType>;
   MetaData?: MetaDataResolvers<ContextType>;
+  Participant?: ParticipantResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   StringNonEmpty?: GraphQLScalarType;
   URL?: GraphQLScalarType;

@@ -1,5 +1,3 @@
-// database schema
-
 export enum Collections {
   accounts = "accounts",
   events = "events",
@@ -9,45 +7,101 @@ export enum Collections {
   likes = "likes",
 }
 
-export enum OrganizerId {
-  nsccpccoe = "nsccpccoe",
-  codechefpccoe = "codechefpccoe",
-  itsa = "itsa"
+export enum LinkTypeEnum {
+  _self = "_self",
+  _blank = "_blank",
+  _parent = "_parent",
+  _top = "_top",
 }
 
-export interface Organizer {
-  id: OrganizerId,        // Organizer Id
-  shortName: string,      // Short Name of Organizer
-  displayName: string,    // Full Name of Organizer
-  avatarLight: string,    // Logo for Day Mode
-  avatarNight: string,    // Logo for Night Mode
-  cover: string           // cover image url
+export enum EventCertificateType {
+  Achievement = "Achievement",
+  Participation = "Participation",
+  Appreciation = "Appreciation",
+  Completion = "Completion",
 }
 
-export type LinkType = "offsite" | "onsite"
+export enum Gender {
+  Male = "Male",
+  Female = "Female",
+  Other = "Other",
+}
+
+export interface Image {
+  light: string // image url for light mode
+  dark: string  // image url for dark mode
+}
+
+export interface Link {
+  displayText: string
+  href: string
+  target: LinkTypeEnum
+}
+
+export interface Participant {
+  id: string
+  email: string
+  displayName: string
+  phoneNumber: string
+  gender: Gender
+  dob: Date
+  photoURL: URL
+  graduationYear: number
+  collegeName: string
+  collegeBranch: string
+  collegeDivision: string
+  prn: string
+  rollNumber: string
+  link: Link[]
+}
+
+export interface EventHost {
+  id: string
+  displayName: string
+  shortName: string
+  logo: Image
+  coverImage: Image
+  links: Link[]
+}
+
+export interface EventSponsor {
+  id: string
+  displayName: string
+  shortName: string
+  logo: Image
+  coverImage: Image
+  links: Link[]
+}
+
+export interface Dignitaries {
+  id: string
+  displayName: string
+  shortName: string
+  photoURL: string
+  links: Link[]
+  signature: Image
+}
 
 export interface Event {
-  displayName: string
+  id: string
+  title: string
   subtitle: string
   description: string
   startAt: Date
   endAt: Date
   featured: boolean
-  cover: string               // cover image url
-  organizers: OrganizerId[]   // array of organizers ids
-  eventPage: {
-    displayText: string
-    link: string
-    type: LinkType
-  }
-  registration: {
-    displayText: string
-    link: string
-    type: LinkType
-  }
-  community: {
-    displayText: string
-    link: string
-    type: LinkType
-  }
+  coverImage: Image           
+  hosts: EventHost["id"][]   // array of organizers ids
+  sponsors: EventSponsor["id"][]   // array of organizers ids
+  landingPage: Link
+  registration: Link
+  community: Link
+}
+
+export interface EventCertificate {
+  id: string
+  type: EventCertificateType
+  event: Event["id"]
+  participant: Participant["id"]
+  signatures: Dignitaries["id"][]
 }
